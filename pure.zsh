@@ -130,7 +130,7 @@ prompt_pure_preprompt_render() {
 	local -a preprompt_parts
 
 	# Set the path.
-	preprompt_parts+=('%F{${prompt_pure_colors[path]}}%~%f')
+	preprompt_parts+=('%F{${prompt_pure_colors[path]}}%2~%f')  # display only the two lowest directories
 
 	# Add Git branch and dirty status info.
 	typeset -gA prompt_pure_vcs_info
@@ -401,8 +401,9 @@ prompt_pure_check_git_arrows() {
 	setopt localoptions noshwordsplit
 	local arrows left=${1:-0} right=${2:-0}
 
-	(( right > 0 )) && arrows+=${PURE_GIT_DOWN_ARROW:-⇣}
-	(( left > 0 )) && arrows+=${PURE_GIT_UP_ARROW:-⇡}
+    # display git arrows with commit counts
+	(( right > 0 )) && arrows+=${right}${PURE_GIT_DOWN_ARROW:-⇣}
+	(( left > 0 )) && arrows+=${left}${PURE_GIT_UP_ARROW:-⇡}
 
 	[[ -n $arrows ]] || return
 	typeset -g REPLY=$arrows
